@@ -14,7 +14,7 @@ pub fn convert(input: &str, source_base: &Bases, target_base: &Bases) -> Result<
     Ok("".to_string())
 }
 
-fn convert_dec_to_hex(input: &str) -> Result<String, ConversionError>
+pub fn convert_dec_to_hex(input: &str) -> Result<String, ConversionError>
 {
 
 
@@ -27,7 +27,7 @@ fn convert_dec_to_hex(input: &str) -> Result<String, ConversionError>
         string = &input[1..];
 
     }
-    let mut num  = convert_srt_to_num(string, Bases::Hexadecimal)?;
+    let mut num  = convert_srt_to_num(string, Bases::Decimal)?;
     num = match sign{
         -1 => num * -1,
         _ => num
@@ -65,7 +65,7 @@ fn convert_srt_to_num(string: &str, source_base :Bases) -> Result<i64, Conversio
     for ch in string.chars()
     {
 
-        let   digit = ch.to_digit(base as u32).ok_or(ConversionError::IllegalCharacter(ch))?;
+        let  digit = ch.to_digit(base as u32).ok_or(ConversionError::IllegalCharacter(ch))?;
 
         num=  num.checked_mul(base)
         .and_then(|res| res.checked_add(digit as i64))
