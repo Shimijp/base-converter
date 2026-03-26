@@ -34,6 +34,10 @@ fn convert_dec_to_hex(input: &str) -> Result<String, ConversionError>
     };
     let mut unum = num as u64;
     let mut hex = String::new();
+    if unum == 0 {
+
+        return Ok("0".to_string());
+    }
     while unum > 0 {
         let dig  = ALPHABET[(unum % 16) as usize];
         hex.push(dig as char);
@@ -63,12 +67,9 @@ fn convert_srt_to_num(string: &str, source_base :Bases) -> Result<i64, Conversio
 
         let   digit = ch.to_digit(base as u32).ok_or(ConversionError::IllegalCharacter(ch))?;
 
-        num  = match digit {
-            0 => num.checked_mul(base).ok_or(ConversionError::IllegalCharacter(ch))?,
-            _ => num.checked_mul(base)
-                .and_then(|res| res.checked_add(digit as i64))
-                .ok_or(ConversionError::SourceOverflow)?,
-        }
+        num=  num.checked_mul(base)
+        .and_then(|res| res.checked_add(digit as i64))
+        .ok_or(ConversionError::SourceOverflow)?;
 
     }
     Ok(num)
